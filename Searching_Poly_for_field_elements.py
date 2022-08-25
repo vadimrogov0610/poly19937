@@ -8,59 +8,7 @@ A^0 + ... + A^19937 = 0
 from typing import Dict
 from time import process_time
 from random import randint as ri
-
-
-class Poly19937:
-    def __init__(self, i: int):
-        self.i = i
-
-    def __bool__(self):
-        return bool(self.i)
-
-    def __repr__(self):
-        y = self.i
-        if not y:
-            return '0'
-        lst = []
-        while y:
-            bl = y.bit_length() - 1
-            lst.append(f'a^{bl}')
-            y ^= 1 << bl
-        return ' + '.join(reversed(lst))
-
-    def reduce(self):
-        bl = self.i.bit_length() - 1
-        while bl >= 19937:
-            self.i ^= f << (bl - 19937)
-            bl = self.i.bit_length() - 1
-
-    def __add__(self, other):
-        return Poly19937(self.i ^ other.i)
-
-    def __mul__(self, other):
-        y = other.i
-        ans = 0
-        while y:
-            bl = y.bit_length() - 1
-            ans ^= self.i << bl
-            y ^= 1 << bl
-        Ans = Poly19937(ans)
-        Ans.reduce()
-        return Ans
-
-
-def add_basic(d: Dict[int, int], elem: int, ind: Dict[int, int], row: int):
-    num = elem.bit_length()
-    ans = 1 << row
-    while num in d:
-        elem ^= d[num]
-        ans ^= ind[num]
-        num = elem.bit_length()
-    if num == 0:
-        return False, ans
-    d[num] = elem
-    ind[num] = ans
-    return True, None
+from Poly19937 import Poly19937
 
 
 cp = [
@@ -79,7 +27,7 @@ f = sum(1 << i for i in cp)
 D = {}
 Ind = {}
 
-A = Poly19937(ri(1, (1 << 5) - 1))
+A = Poly19937(ri(1, (1 << 19937) - 1))
 A.reduce()
 print(f'A = {A}\nPoly:')
 
