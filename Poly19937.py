@@ -1,7 +1,9 @@
 """
-class Poly19937 -- числа от 0 до 2^19937 - 1
-отвечающие c0 + c1a + c2a^2 + ... + c19936a^19936 in GF(2^19937)
-реализованы арифметические операции. reduce -- сведение по модулю f ( = cp)
+class Poly19937 -- numbers from 0 to 2^19937 - 1
+connected to elements c0 + c1a + c2a^2 + ... + c19936a^19936 in GF(2^19937)
+Arithmetic operations, rapid power, reduce -- corresponds to modulo f
+f -- irredusible polynomial of degree 19937, length 135
+GF(2^19937) = GF(2)[X] / <f>
 """
 from time import process_time
 
@@ -50,7 +52,7 @@ class Poly19937:
         Ans.reduce()
         return Ans
 
-    def __pow__(self, power):  # не работает почему-то
+    def __pow__(self, power):  # rapid power using Frobenius automorphism
         if power == 0:
             return Poly19937(1)
         if power == 2:
@@ -82,7 +84,7 @@ cp = [
 f = sum(1 << i for i in cp)  # characteristic poly
 
 # EXAMPLE:
-"""B = Poly19937(1 << 50000)
+B = Poly19937(1 << 50000)
 
 N = 65537
 
@@ -99,4 +101,4 @@ for i in range(N):
 print(f'B^{N} = {S}')
 print(f'usual time: = {process_time() - ttt}')
 
-print(S.i == pow(B, N).i)"""
+print(S.i == pow(B, N).i)
